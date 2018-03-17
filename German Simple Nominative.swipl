@@ -1,0 +1,141 @@
+word([gibt],[verb],[ditransitive]).
+word([liebt],[verb],[transitive]).
+word([der],[specifier],[subject]).
+word([den],[specifier],[direct_object]).
+word([dem],[specifier],[indirect_object]).
+word([des],[specifier],[possessive]).
+word([fritz],[noun],[subject],[animated]).
+word([fritz],[noun],[object],[animated]).
+word([hund],[noun],[subject],[animated]).
+word([hund],[noun],[object],[animated]).
+word([knochen],[noun],[object],[inanimate]).
+
+nominative(Subject):-
+    word(Noun,[noun],[subject],[animated]),
+    word(Specifier,[specifier],[subject]),
+    append(Specifier,Noun,Subject).
+
+accusative(Direct_object):-
+    word(Noun,[noun],[object],Animation),
+    word(Specifier,[specifier],[direct_object]),
+    append(Specifier,Noun,Direct_object).
+
+dative(Indirect_object):-
+    word(Noun,[noun],[object],[animated]),
+    word(Specifier,[specifier],[indirect_object]),
+    append(Specifier,Noun,Indirect_object).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[transitive]),
+    nominative(Subject),
+    accusative(Object),
+    append(Object,Action,Phrase),
+    append(Phrase,Subject,Sentence).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[transitive]),
+    nominative(Subject),
+    accusative(Object),
+    append(Subject,Action,Phrase),
+    append(Phrase,Object,Sentence).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[ditransitive]),
+    nominative(Subject),
+    accusative(Object),
+    dative(Indirect_object),
+    append(Subject,Action,Phrase),
+    append(Phrase,Indirect_object,Incomplete),
+    append(Incomplete,Object,Sentence).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[ditransitive]),
+    nominative(Subject),
+    accusative(Object),
+    dative(Indirect_object),
+    append(Subject,Action,Phrase),
+    append(Phrase,Indirect_object,Incomplete),
+    append(Incomplete,Object,Sentence).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[ditransitive]),
+    nominative(Subject),
+    accusative(Object),
+    dative(Indirect_object),
+    append(Indirect_object,Action,Phrase),
+    append(Phrase,Object,Incomplete),
+    append(Incomplete,Subject,Sentence).
+
+german_sentence(Sentence):-
+    word(Action,[verb],[ditransitive]),
+    nominative(Subject),
+    accusative(Object),
+    dative(Indirect_object),
+    append(Object,Action,Phrase),
+    append(Phrase,Indirect_object,Incomplete),
+    append(Incomplete,Subject,Sentence).
+
+/*
+?- german_sentence(X)
+
+X = [den, fritz, liebt, der, fritz]
+X = [den, hund, liebt, der, fritz]
+X = [den, knochen, liebt, der, fritz]
+X = [den, fritz, liebt, der, hund]
+X = [den, hund, liebt, der, hund]
+X = [den, knochen, liebt, der, hund]
+X = [der, fritz, liebt, den, fritz]
+X = [der, fritz, liebt, den, hund]
+X = [der, fritz, liebt, den, knochen]
+X = [der, hund, liebt, den, fritz]
+X = [der, hund, liebt, den, hund]
+X = [der, hund, liebt, den, knochen]
+X = [der, fritz, gibt, dem, fritz, den, fritz]
+X = [der, fritz, gibt, dem, hund, den, fritz]
+X = [der, fritz, gibt, dem, fritz, den, hund]
+X = [der, fritz, gibt, dem, hund, den, hund]
+X = [der, fritz, gibt, dem, fritz, den, knochen]
+X = [der, fritz, gibt, dem, hund, den, knochen]
+X = [der, hund, gibt, dem, fritz, den, fritz]
+X = [der, hund, gibt, dem, hund, den, fritz]
+X = [der, hund, gibt, dem, fritz, den, hund]
+X = [der, hund, gibt, dem, hund, den, hund]
+X = [der, hund, gibt, dem, fritz, den, knochen]
+X = [der, hund, gibt, dem, hund, den, knochen]
+X = [der, fritz, gibt, dem, fritz, den, fritz]
+X = [der, fritz, gibt, dem, hund, den, fritz]
+X = [der, fritz, gibt, dem, fritz, den, hund]
+X = [der, fritz, gibt, dem, hund, den, hund]
+X = [der, fritz, gibt, dem, fritz, den, knochen]
+X = [der, fritz, gibt, dem, hund, den, knochen]
+X = [der, hund, gibt, dem, fritz, den, fritz]
+X = [der, hund, gibt, dem, hund, den, fritz]
+X = [der, hund, gibt, dem, fritz, den, hund]
+X = [der, hund, gibt, dem, hund, den, hund]
+X = [der, hund, gibt, dem, fritz, den, knochen]
+X = [der, hund, gibt, dem, hund, den, knochen]
+X = [dem, fritz, gibt, den, fritz, der, fritz]
+X = [dem, hund, gibt, den, fritz, der, fritz]
+X = [dem, fritz, gibt, den, hund, der, fritz]
+X = [dem, hund, gibt, den, hund, der, fritz]
+X = [dem, fritz, gibt, den, knochen, der, fritz]
+X = [dem, hund, gibt, den, knochen, der, fritz]
+X = [dem, fritz, gibt, den, fritz, der, hund]
+X = [dem, hund, gibt, den, fritz, der, hund]
+X = [dem, fritz, gibt, den, hund, der, hund]
+X = [dem, hund, gibt, den, hund, der, hund]
+X = [dem, fritz, gibt, den, knochen, der, hund]
+X = [dem, hund, gibt, den, knochen, der, hund]
+X = [den, fritz, gibt, dem, fritz, der, fritz]
+X = [den, fritz, gibt, dem, hund, der, fritz]
+X = [den, hund, gibt, dem, fritz, der, fritz]
+X = [den, hund, gibt, dem, hund, der, fritz]
+X = [den, knochen, gibt, dem, fritz, der, fritz]
+X = [den, knochen, gibt, dem, hund, der, fritz]
+X = [den, fritz, gibt, dem, fritz, der, hund]
+X = [den, fritz, gibt, dem, hund, der, hund]
+X = [den, hund, gibt, dem, fritz, der, hund]
+X = [den, hund, gibt, dem, hund, der, hund]
+X = [den, knochen, gibt, dem, fritz, der, hund]
+X = [den, knochen, gibt, dem, hund, der, hund]
+*/
