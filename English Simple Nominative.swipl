@@ -1,0 +1,121 @@
+word([he],[pronoun],[subject]).
+word([she],[pronoun],[subject]).
+word([him],[pronoun],[object]).
+word([her],[pronoun],[object]).
+word([it],[pronoun],[subject]).
+word([it],[pronoun],[object]).
+word([prefers],[verb],[ditransitive]).
+word([sleeps],[verb],[intransitive]).
+word([loves],[verb],[transitive]).
+word([the],[specifier]).
+word([car],[noun],[subject]).
+
+subject(Subject):-
+    word(Subject,[pronoun],[subject]).
+
+object(Object):-
+    word(Object,[pronoun],[object]).
+
+object(Object):-
+    word(Noun,[noun],[object]),
+    word(Specifier,[specifier]),
+    append(Specifier,Noun,Object).
+
+sentence(Sentence):-
+    subject(Subject),
+    word(Action,[verb],[ditransitive]),
+    object(Object),
+    object(SecondObject),
+    append(Subject,Action,Nominative),
+    append(Nominative,Object,Transitive),
+    append(Transitive,[to],Incomplete),
+    append(Incomplete,SecondObject,Sentence).
+
+sentence(Sentence):-
+    subject(Subject),
+    word(Action,[verb],[intransitive]),
+    append(Subject,Action,Sentence).
+
+sentence(Sentence):-
+    subject(Subject),
+    word(Action,[verb],[transitive]),
+    object(Object),
+    append(Subject,Action,Nominative),
+    append(Nominative,Object,Sentence).
+
+/*
+?- sentence(Sentence)
+
+Sentence = [he, prefers, him, to, him]
+Sentence = [he, prefers, him, to, her]
+Sentence = [he, prefers, him, to, it]
+Sentence = [he, prefers, him, to, the, car]
+Sentence = [he, prefers, her, to, him]
+Sentence = [he, prefers, her, to, her]
+Sentence = [he, prefers, her, to, it]
+Sentence = [he, prefers, her, to, the, car]
+Sentence = [he, prefers, it, to, him]
+Sentence = [he, prefers, it, to, her]
+Sentence = [he, prefers, it, to, it]
+Sentence = [he, prefers, it, to, the, car]
+Sentence = [he, prefers, the, car, to, him]
+Sentence = [he, prefers, the, car, to, her]
+Sentence = [he, prefers, the, car, to, it]
+Sentence = [he, prefers, the, car, to, the, car]
+Sentence = [she, prefers, him, to, him]
+Sentence = [she, prefers, him, to, her]
+Sentence = [she, prefers, him, to, it]
+Sentence = [she, prefers, him, to, the, car]
+Sentence = [she, prefers, her, to, him]
+Sentence = [she, prefers, her, to, her]
+Sentence = [she, prefers, her, to, it]
+Sentence = [she, prefers, her, to, the, car]
+Sentence = [she, prefers, it, to, him]
+Sentence = [she, prefers, it, to, her]
+Sentence = [she, prefers, it, to, it]
+Sentence = [she, prefers, it, to, the, car]
+Sentence = [she, prefers, the, car, to, him]
+Sentence = [she, prefers, the, car, to, her]
+Sentence = [she, prefers, the, car, to, it]
+Sentence = [she, prefers, the, car, to, the, car]
+Sentence = [it, prefers, him, to, him]
+Sentence = [it, prefers, him, to, her]
+Sentence = [it, prefers, him, to, it]
+Sentence = [it, prefers, him, to, the, car]
+Sentence = [it, prefers, her, to, him]
+Sentence = [it, prefers, her, to, her]
+Sentence = [it, prefers, her, to, it]
+Sentence = [it, prefers, her, to, the, car]
+Sentence = [it, prefers, it, to, him]
+Sentence = [it, prefers, it, to, her]
+Sentence = [it, prefers, it, to, it]
+Sentence = [it, prefers, it, to, the, car]
+Sentence = [it, prefers, the, car, to, him]
+Sentence = [it, prefers, the, car, to, her]
+Sentence = [it, prefers, the, car, to, it]
+Sentence = [it, prefers, the, car, to, the, car]
+Sentence = [he, sleeps]
+Sentence = [he, sleeps]
+Sentence = [he, sleeps]
+Sentence = [he, sleeps]
+Sentence = [she, sleeps]
+Sentence = [she, sleeps]
+Sentence = [she, sleeps]
+Sentence = [she, sleeps]
+Sentence = [it, sleeps]
+Sentence = [it, sleeps]
+Sentence = [it, sleeps]
+Sentence = [it, sleeps]
+Sentence = [he, loves, him]
+Sentence = [he, loves, her]
+Sentence = [he, loves, it]
+Sentence = [he, loves, the, car]
+Sentence = [she, loves, him]
+Sentence = [she, loves, her]
+Sentence = [she, loves, it]
+Sentence = [she, loves, the, car]
+Sentence = [it, loves, him]
+Sentence = [it, loves, her]
+Sentence = [it, loves, it]
+Sentence = [it, loves, the, car]
+*/
